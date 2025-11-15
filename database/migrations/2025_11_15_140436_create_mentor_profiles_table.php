@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mentor_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->tinyText('bio')->nullable();
+            $table->text('bio')->nullable();
             $table->string('experience', 100);
             $table->string('skils_text');
             $table->timestamps();

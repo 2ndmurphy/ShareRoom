@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('mentor_id')->constrained('users');
             $table->foreignId('type_id')->constrained('room_types');
             $table->string('title', 120);
-            $table->tinyText('description');
+            $table->text('description');
             $table->enum('mode', ['online', 'offline', 'hybrid']);
             $table->string('location', 100);
             $table->dateTime('started_at');
