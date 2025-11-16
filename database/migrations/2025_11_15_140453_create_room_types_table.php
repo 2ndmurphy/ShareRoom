@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement('PRAGMA foreign_keys = ON');
+
         Schema::create('room_types', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->timestamps();

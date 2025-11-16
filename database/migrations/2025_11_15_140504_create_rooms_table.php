@@ -11,19 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement('PRAGMA foreign_keys = ON');
+
         Schema::create('rooms', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('mentor_id')->constrained('users');
-            $table->foreignId('type_id')->constrained('room_types');
-            $table->string('title', 120);
-            $table->text('description');
-            $table->enum('mode', ['online', 'offline', 'hybrid']);
-            $table->string('location', 100);
-            $table->dateTime('started_at');
+            $table->bigIncrements('id');
+            // mentor bisa di-set null jika user dihapus / dinonaktifkan
+            $table->unsignedBigInteger('mentor_id')->nullable();
+            $table->unsignedBigInteger('type_id')->nullable();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->enum('mode', ['online','offline','hybrid'])->default('online');
+            $table->string('location')->nullable();
+            $table->dateTime('started_at')->nullable();
             $table->dateTime('end_at')->nullable();
             $table->text('requirements')->nullable();
-            $table->enum('status', ['waiting', 'started', 'completed'])->default('waiting');
+            $table->enum('status', ['waiting','started','ended'])->default('waiting');
             $table->timestamps();
+            $table->softDeletes();
+
+            // foreign keys
+            $table->foreign('mentor_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('type_id')->references('id')->on('room_types')->onDelete('set null');
+
+            $table->index(['mentor_id']);
+            $table->index(['type_id']);
+            $table->index(['status']);
+            $table->index(['started_at']);
         });
     }
 

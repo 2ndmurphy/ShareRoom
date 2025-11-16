@@ -11,13 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement('PRAGMA foreign_keys = ON');
+
         Schema::create('mentor_profiles', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id')->unique(); // enforce 1:1
             $table->text('bio')->nullable();
-            $table->string('experience', 100);
-            $table->string('skils_text');
+            $table->string('experience')->nullable();
+            $table->text('skills_text')->nullable(); // fallback free-form
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->index('experience');
         });
     }
 
