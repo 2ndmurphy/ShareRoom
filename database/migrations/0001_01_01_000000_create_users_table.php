@@ -17,9 +17,9 @@ return new class extends Migration {
             $table->string('name');
             $table->string('email')->unique();
             $table->string('email_verified_at')->nullable();
-            $table->string('password_hash');
+            $table->string('password');
             $table->enum('role', ['mentor', 'learner'])->default('learner');
-            $table->enum('mentor_status', ['pending', 'approved'])->default('pending');
+            $table->string('remember_token')->unique();
             $table->timestamps();
             $table->softDeletes();
             $table->index('role');
