@@ -4,21 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RoomObjective extends Model
+class RoomMaterial extends Model
 {
     protected $fillable = [
         'room_id',
         'title',
-        'level',
+        'description',
+        'file_path',
+        'link_url',
+        'content',
     ];
 
     public function room()
     {
         return $this->belongsTo(Room::class);
-    }
-
-    public function progress()
-    {
-        return $this->hasMany(ObjectiveProgress::class, 'objective_id');
     }
 }

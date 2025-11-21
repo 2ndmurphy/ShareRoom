@@ -11,12 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement('PRAGMA foreign_keys = ON');
+
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('room_id')->constrained('rooms');
-            $table->foreignId('user_id')->constrained('users');
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('user_id');
             $table->text('content');
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->index(['room_id', 'user_id']);
         });
     }
 

@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RoomType extends Model
+class Skill extends Model
 {
     protected $fillable = [
         'name',
-        'description',
     ];
 
-    public function rooms()
+    public function mentorSkills()
     {
-        return $this->hasMany(Room::class);
+        return $this->hasMany(MentorSkill::class);
     }
 }

@@ -10,15 +10,20 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        DB::statement('PRAGMA foreign_keys = ON');
+
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->timestamp('email_verified_at')->nullable()->change();
             $table->string('password');
             $table->enum('role', ['mentor', 'learner'])->default('learner');
-            $table->rememberToken();
+            $table->boolean('mentor_status')->default(false)->after('role');
+            $table->string('remember_token')->nullable()->change();
             $table->timestamps();
+            $table->softDeletes();
+            $table->index('role');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

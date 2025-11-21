@@ -13,15 +13,10 @@ return new class extends Migration
     {
         DB::statement('PRAGMA foreign_keys = ON');
 
-        Schema::create('room_objectives', function (Blueprint $table) {
+        Schema::create('skills', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('room_id');
-            $table->string('title');
-            $table->enum('level', ['basic','intermediate','advanced'])->default('basic');
+            $table->string('name')->unique();
             $table->timestamps();
-
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->index('level');
         });
     }
 
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room_objectives');
+        Schema::dropIfExists('skills');
     }
 };

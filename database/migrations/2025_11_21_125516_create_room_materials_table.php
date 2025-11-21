@@ -13,15 +13,20 @@ return new class extends Migration
     {
         DB::statement('PRAGMA foreign_keys = ON');
 
-        Schema::create('room_objectives', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('room_materials', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('room_id');
             $table->string('title');
-            $table->enum('level', ['basic','intermediate','advanced'])->default('basic');
-            $table->timestamps();
+            $table->text('description')->nullable();
 
+            // Tipe materi bisa salah satu dari: file, link, atau content
+            $table->string('file_path')->nullable()->change();
+            $table->string('link_url')->nullable()->change();
+            $table->text('content')->nullable()->change();
+
+            // Room punya banyak materi
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');
-            $table->index('level');
+            $table->timestamps();
         });
     }
 
@@ -30,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('room_objectives');
+        Schema::dropIfExists('room_materials');
     }
 };

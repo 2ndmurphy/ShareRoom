@@ -6,5 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class MentorProfile extends Model
 {
-    //
+    protected $fillable = [
+        'user_id',
+        'bio',
+        'experience',
+        'skills_text'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'mentor_skills', 'mentor_profile_id', 'skill_id')
+            ->withTimestamps();
+    }
 }

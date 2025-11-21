@@ -20,7 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'email_verified_at',
         'password',
+        'role',
+        'mentor_status'
     ];
 
     /**
@@ -44,5 +47,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function mentorProfile()
+    {
+        return $this->hasOne(MentorProfile::class);
+    }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'room_members')
+                    ->withPivot('joined_at')
+                    ->withTimestamps();
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function objectiveProgress()
+    {
+        return $this->hasMany(ObjectiveProgress::class);
     }
 }
