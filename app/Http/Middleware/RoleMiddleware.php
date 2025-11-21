@@ -16,10 +16,27 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
-        if (!Auth::check() || Auth::user()->role !== $role) {
-            return response()->json(['message' => 'Unauthorized.'], 403);
+        // If the user is not authenticated, behave like the auth middleware:
+        // - redirect to login for web requests
+        // - return JSON for API / JSON requests
+        if (!Auth::check()) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+
+            return redirect()->guest(route('login'));
         }
-        
+
+        // User is authenticated but has the wrong role
+        if (Auth::user()->role !== $role) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Forbidden.'], 403);
+            }
+
+            // Let Laravel render the standard 403 error page for web requests
+            abort(403);
+        }
+
         return $next($request);
     }
 }
