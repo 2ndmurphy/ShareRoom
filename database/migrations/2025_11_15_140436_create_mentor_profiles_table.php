@@ -18,7 +18,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->unique(); // enforce 1:1
             $table->text('bio')->nullable();
             $table->string('experience')->nullable();
-            $table->text('skills_text')->nullable(); // fallback free-form
             $table->timestamps();
             $table->softDeletes();
 

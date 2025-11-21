@@ -2,64 +2,81 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Mentor\MentorProfileRequest;
 use App\Models\MentorProfile;
+use App\Models\Skill;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 
 class MentorProfileController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show the form for editing mentor profile.
+     * @param MentorProfile $mentorProfile
+     * @return void
      */
-    public function index()
+    public function edit(Request $request)
     {
-        //
-    }
+        $user = $request->user();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $profile = $user->mentorProfile()->firstOrCreate(
+            ['user_id' => $user->id]
+        );
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $profile->load('skills');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(MentorProfile $mentorProfile)
-    {
-        //
-    }
+        // Ambil semua skills untuk <select>
+        $allSkills = Skill::query()->orderBy('name')->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(MentorProfile $mentorProfile)
-    {
-        //
+        // return view('mentor.profile.edit', [
+        //     'profile' => $profile,
+        //     'allSkills' => $allSkills,
+        // ]);
     }
 
     /**
      * Update the specified resource in storage.
+     * @param Request $request
+     * @param MentorProfile $mentorProfile
+     * @return void
      */
-    public function update(Request $request, MentorProfile $mentorProfile)
+    public function update(MentorProfileRequest $request)
     {
-        //
-    }
+        // Ambil hanya data yang sudah lolos validasi
+        $validated = $request->validated();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(MentorProfile $mentorProfile)
-    {
-        //
+        $user = $request->user();
+
+        // ambil atau buat profile
+        $profile = $user->mentorProfile()->firstOrCreate([
+            'user_id' => $user->id,
+        ]);
+
+        DB::transaction(function () use ($profile, $validated) {
+
+            // Update profile hanya dengan data tervalidasi 'skills'
+            $profile->update(collect($validated)->except(['skills', 'new_skills'])->all());
+
+            $skillIds = $validated['skills'] ?? [];
+
+            // Handle new_skills
+            if (!empty($validated['new_skills'])) {
+                $newSkillIds = collect($validated['new_skills'])->map(function ($name) {
+                    $name = trim(Str::lower($name));
+                    return Skill::firstOrCreate(['name' => $name])->id;
+                })->toArray();
+
+                $skillIds = array_merge($skillIds, $newSkillIds);
+            }
+
+            $skillIds = array_values(array_unique($skillIds));
+
+            // Sync mentor skills
+            $profile->skills()->sync($skillIds);
+        });
+
+        // return redirect()->route('mentor.profile.edit')->with('status', 'Profil berhasil diperbarui!');
     }
 }

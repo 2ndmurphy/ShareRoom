@@ -10,8 +10,12 @@ class Skill extends Model
         'name',
     ];
 
-    public function mentorSkills()
+    /**
+     * Relasi N:N ke MentorProfile
+     * Ini adalah relasi baliknya.
+     */
+    public function mentorProfiles()
     {
-        return $this->hasMany(MentorSkill::class);
+        return $this->belongsToMany(MentorProfile::class, 'mentor_skills', 'skill_id', 'mentor_profile_id');
     }
 }
