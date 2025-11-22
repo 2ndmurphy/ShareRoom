@@ -15,7 +15,10 @@ class RoomMaterial extends Model
         'content',
     ];
 
-    public function room()
+    /**
+     * Relasi N:1 ke Room (Induk).
+     */
+    public function room() 
     {
         return $this->belongsTo(Room::class);
     }

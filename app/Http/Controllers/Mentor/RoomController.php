@@ -1,9 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Mentor;
 
-use App\Models\Room;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Mentor\StoreRoomRequest;
 use Illuminate\Http\Request;
+use App\Models\Room;
+use App\Models\RoomType;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class RoomController extends Controller
 {
@@ -16,19 +21,28 @@ class RoomController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan formulir untuk membuat Room baru.
      */
     public function create()
     {
-        //
+        $roomTypes = RoomType::query()->orderBy('name')->get();
+
+        // return view('mentor.room.create', ['roomTypes' => $roomTypes,]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan Room baru ke database.
      */
-    public function store(Request $request)
+    public function store(StoreRoomRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $mentor = $request->user();
+
+        $room = $mentor->roomAsMentor()->create($validated);
+
+        // return redirect()->route('mentor.material.create', $room)
+        //     ->with('status', 'Room berhasil dibuat! Silakan tambahkan materi.');
     }
 
     /**
@@ -36,7 +50,13 @@ class RoomController extends Controller
      */
     public function show(Room $room)
     {
-        //
+        if ($room->mentor_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $room->load(['materials', 'posts']);
+
+        // return view('mentor.room.show', ['room' => $room]);
     }
 
     /**

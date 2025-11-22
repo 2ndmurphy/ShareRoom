@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('room_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('title');
             $table->text('content');
             $table->timestamps();
             $table->softDeletes();

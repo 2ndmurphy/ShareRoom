@@ -54,6 +54,19 @@ class User extends Authenticatable
         return $this->hasOne(MentorProfile::class);
     }
 
+    /**
+     * Relasi untuk Room yang DIBUAT oleh User (sebagai Mentor)
+     * (1-to-N)
+     */
+    public function roomsAsMentor()
+    {
+        return $this->hasMany(Room::class, 'mentor_id');
+    }
+
+    /**
+     * Relasi untuk Room yang DIIKUTI oleh User (sebagai Member)
+     * (N-to-N)
+     */
     public function rooms()
     {
         return $this->belongsToMany(Room::class, 'room_members')
@@ -61,6 +74,10 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    /**
+     * Relasi 1:N (Satu User bisa menulis banyak Post)
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Post, User>
+     */
     public function posts()
     {
         return $this->hasMany(Post::class);
