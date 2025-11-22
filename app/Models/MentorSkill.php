@@ -13,16 +13,11 @@ class MentorSkill extends Model
 
     public function mentorProfile()
     {
-        return $this->belongsTo(MentorProfile::class);
+        return $this->belongsTo(MentorProfile::class, 'mentor_profile_id');
     }
 
-    /**
-     * Relasi N:N ke Skill
-     * Ini adalah relasi baru yang kita tambahkan.
-     */
-    public function skills()
+    public function skill()
     {
-        return $this->belongsToMany(Skill::class, 'mentor_skills', 'mentor_profile_id', 'skill_id')
-                    ->withTimestamps();
+        return $this->belongsTo(Skill::class, 'skill_id');
     }
 }

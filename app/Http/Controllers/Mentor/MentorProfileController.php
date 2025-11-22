@@ -15,18 +15,16 @@ class MentorProfileController extends Controller
 {
     /**
      * Show the form for editing mentor profile.
-     * @param MentorProfile $mentorProfile
+     * @param Request $request
      * @return void
      */
     public function edit(Request $request)
     {
         $user = $request->user();
 
-        $profile = $user->mentorProfile()->firstOrCreate(
-            ['user_id' => $user->id]
-        );
-
-        $profile->load('skills');
+        $profile = $user->mentorProfile()
+            ->with('skills')
+            ->first();
 
         // Ambil semua skills untuk <select>
         $allSkills = Skill::query()->orderBy('name')->get();

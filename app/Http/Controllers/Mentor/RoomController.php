@@ -39,7 +39,7 @@ class RoomController extends Controller
 
         $mentor = $request->user();
 
-        $room = $mentor->roomAsMentor()->create($validated);
+        $room = $mentor->roomsAsMentor()->create($validated);
 
         // return redirect()->route('mentor.material.create', $room)
         //     ->with('status', 'Room berhasil dibuat! Silakan tambahkan materi.');
