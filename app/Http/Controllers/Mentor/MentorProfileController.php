@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Mentor;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Mentor\MentorProfileRequest;
 use App\Models\MentorProfile;
 use App\Models\Skill;

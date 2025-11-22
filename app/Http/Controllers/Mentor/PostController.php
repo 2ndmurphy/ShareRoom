@@ -1,14 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Mentor;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Mentor\StorePostRequest;
+use App\Models\Room;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan formulir untuk menulis Post undangan baru.
      */
     public function index()
     {
@@ -18,17 +23,28 @@ class PostController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Room $room)
     {
-        //
+        // return view('mentor.post.create', [
+        //     'room' => $room,
+        // ]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan Post baru ke database.
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request, Room $room)
     {
-        //
+        $validated = $request->validated();
+
+        $room->posts()->create([
+            'user_id' => $request->user()->id,
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+        ]);
+
+        // return redirect()->route('mentor.room.show', $room)
+            // ->with('status', 'Post undangan berhasil dipublikasikan!');
     }
 
     /**
