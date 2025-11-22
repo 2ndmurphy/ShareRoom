@@ -39,13 +39,10 @@ class RoomMaterialController extends Controller
     {
         $validated = $request->validated();
 
-        $data = collect($validated)->except(['file_upload', 'type'])->all();
-        $type = $validated['type'];
+        $data = collect($validated)->except(['file_upload'])->all();
 
-        // Handle file upload jika tipe materi 'file'
-        if ($type == 'file' && $request->hasFile('file_upload')) {
-            $path = $request->file('file_upload')->store('materials', 'public');
-            $data['file_path'] = $path;
+        if ($validated['type'] === 'file' && $request->hasFile('file_upload')) {
+            $data['file_path'] = $request->file('file_upload')->store('materials', 'public');
         }
 
         $room->materials()->create($data);

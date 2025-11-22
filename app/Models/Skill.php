@@ -16,6 +16,8 @@ class Skill extends Model
      */
     public function mentorProfiles()
     {
-        return $this->belongsToMany(MentorProfile::class, 'mentor_skills', 'skill_id', 'mentor_profile_id');
+        return $this->belongsToMany(MentorProfile::class, 'mentor_skills')
+            ->using(MentorSkill::class)
+            ->withTimestamps();
     }
 }

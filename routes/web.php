@@ -28,8 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware(['role:mentor', 'verified'])->prefix('mentor')->name('mentor.')->group(function () {
         Route::resource('profile', MentorProfileController::class);
         Route::resource('rooms', RoomController::class);
-        Route::resource('materials', RoomMaterialController::class);
-        Route::resource('posts', PostController::class);
+        Route::resource('rooms.materials', RoomMaterialController::class);
+        Route::resource('rooms.posts', PostController::class);
     });
 
     // Learner Only Page Here
