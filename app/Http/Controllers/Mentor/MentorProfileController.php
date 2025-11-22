@@ -22,9 +22,11 @@ class MentorProfileController extends Controller
     {
         $user = $request->user();
 
-        $profile = $user->mentorProfile()
-            ->with('skills')
-            ->first();
+        $profile = $user->mentorProfile()->firstOrCreate([
+            'user_id' => $user->id,
+        ]);
+
+        $profile->load('skills');
 
         // Ambil semua skills untuk <select>
         $allSkills = Skill::query()->orderBy('name')->get();
