@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use App\Http\Requests\JoinRoomRequest;
+use App\Http\Requests\LeaveRoomRequest;
 
 class ExploreController extends Controller
 {
@@ -25,7 +26,7 @@ class ExploreController extends Controller
     /**
      * Tampilkan halaman detail publik untuk satu Room.
      */
-    public function show(Room $room)
+    public function showRoom(Room $room)
     {
         // Eager load semua data yang relevan
         $room->load(['mentor.mentorProfile', 'materials', 'roomType', 'posts']);
@@ -48,7 +49,7 @@ class ExploreController extends Controller
      * Daftarkan user yang login sebagai member di Room.
      * Ini adalah method 'store'.
      */
-    public function store(JoinRoomRequest $request, Room $room)
+    public function joinRoom(JoinRoomRequest $request, Room $room)
     {
         $user = $request->user();
 
@@ -57,7 +58,26 @@ class ExploreController extends Controller
         // - Jika user SUDAH join, tidak terjadi apa-apa (tidak ada error duplikat).
         $user->rooms()->syncWithoutDetaching($room->id);
 
+        // Berikan respon yang eksplisit agar UX jelas untuk browser dan klien API.
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Anda berhasil bergabung ke Room!',
+                'room_id' => $room->id,
+            ]);
+        }
+
         // return redirect()->route('room.show', $room)
         //     ->with('status', 'Anda berhasil bergabung ke Room!');
+    }
+
+    public function leaveRoom(LeaveRoomRequest $request, Room $room)
+    {
+        $user = $request->user();
+
+        // detach() adalah kebalikan dari attach() / sync()
+        $user->rooms()->detach($room->id);
+
+        return redirect()->route('room.show', $room)
+            ->with('status', 'Anda telah berhasil keluar dari Room.');
     }
 }

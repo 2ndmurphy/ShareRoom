@@ -22,7 +22,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Common Page for all authenticated users
-    Route::resource('explore', ExploreController::class);
+    Route::prefix('explore')->name('explore.')->group(fn () => [
+        Route::get('/', [ExploreController::class, 'index'])->name('index'),
+        Route::get('/{room}', [ExploreController::class, 'showRoom'])->name('room.show'),
+        Route::post('/{room}/join', [ExploreController::class, 'joinRoom'])->name('room.join'),
+        Route::delete('/{room}/leave', [ExploreController::class, 'leaveRoom'])->name('room.leave'),
+    ]);
 
     // Mentor Verified Only Page Here
     Route::middleware(['role:mentor', 'verified'])->prefix('mentor')->name('mentor.')->group(function () {
