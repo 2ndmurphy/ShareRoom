@@ -14,7 +14,7 @@ class StoreRoomRequest extends FormRequest
     {
         return $this->user() &&
             $this->user()->role === 'mentor' &&
-            $this->user()->mentor_status === 'approved';
+            $this->user()->mentor_status === true;
     }
 
     /**

@@ -16,11 +16,11 @@ return new class extends Migration {
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable()->change();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['mentor', 'learner'])->default('learner');
             $table->boolean('mentor_status')->default(false)->after('role');
-            $table->string('remember_token')->nullable()->change();
+            $table->string('remember_token')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->index('role');

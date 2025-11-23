@@ -20,9 +20,9 @@ return new class extends Migration
             $table->text('description')->nullable();
 
             // Tipe materi bisa salah satu dari: file, link, atau content
-            $table->string('file_path')->nullable()->change();
-            $table->string('link_url')->nullable()->change();
-            $table->text('content')->nullable()->change();
+            $table->string('file_path')->nullable();
+            $table->string('link_url')->nullable();
+            $table->text('content')->nullable();
 
             // Room punya banyak materi
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');

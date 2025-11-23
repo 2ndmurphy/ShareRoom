@@ -56,7 +56,9 @@ class ExploreController extends Controller
         // syncWithoutDetaching() adalah cara TERBAIK:
         // - Jika user belum join, dia akan di-attach (join).
         // - Jika user SUDAH join, tidak terjadi apa-apa (tidak ada error duplikat).
-        $user->rooms()->syncWithoutDetaching($room->id);
+        $user->rooms()->syncWithoutDetaching([
+            $room->id => ['joined_at' => now()],
+        ]);
 
         // Berikan respon yang eksplisit agar UX jelas untuk browser dan klien API.
         if ($request->wantsJson()) {

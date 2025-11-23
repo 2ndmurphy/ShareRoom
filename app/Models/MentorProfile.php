@@ -19,12 +19,15 @@ class MentorProfile extends Model
     }
 
     /**
-     * Relasi N:N ke Skill via MentorSkill
+     * Relasi N:N ke Skill
      */
     public function skills()
     {
-        return $this->belongsToMany(Skill::class, 'mentor_skills')
-            ->using(MentorSkill::class)
-            ->withTimestamps();
+        return $this->belongsToMany(
+            Skill::class,
+            'mentor_skills',
+            'mentor_profile_id',
+            'skill_id'
+        )->withTimestamps();
     }
 }
