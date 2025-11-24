@@ -1,3 +1,5 @@
-<x-explore-layout>
-    <h1>Welcome, {{ auth()->user()->name }} a.k.a {{ auth()->user()->role }}</h1>
-</x-explore-layout>
+@extends('layouts.explore')
+
+@section('content')
+    <h1>Welcome, {{ Auth::user()->name }}</h1>
+@endsection
