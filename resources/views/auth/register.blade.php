@@ -32,7 +32,7 @@
                 name="email"
                 :value="old('email')"
                 required
-                autocomplete="username"
+                autocomplete="email"
                 placeholder="Email"
             />
             <x-input-error :messages="$errors->get('email')" class="mt-2 text-white text-base" />
@@ -72,7 +72,7 @@
         <div class="pt-2">
             <button
                 type="submit"
-                class="w-full rounded-full bg-white py-4 text-xl font-bold text-teal-500 hover:bg-teal-50 transition">
+                class="w-full rounded-full bg-white py-4 text-xl font-bold text-teal-500 hover:bg-teal-50 focus:ring-2 focus:ring-teal-500 focus:outline-none transition">
                 Sign Up
             </button>
         </div>

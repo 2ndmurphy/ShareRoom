@@ -20,7 +20,7 @@ class ExploreController extends Controller
             ->latest()
             ->paginate(15);
 
-        // return view('explore.index', compact('posts'));
+        return view('explore', compact('posts'));
     }
 
     /**
