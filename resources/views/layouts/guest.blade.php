@@ -35,9 +35,9 @@
         <div class="w-full md:w-1/2 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-10 py-10">
             {{-- Logo + nama app --}}
             <div class="mb-8 flex items-center gap-3">
-                <x-application-logo class="w-12 h-12" />
+                <img src="/images/icons/shareroom-icon.webp" alt="Shareroom" class="w-24 h-24">
                 <span class="text-3xl font-semibold text-teal-500">
-                    {{ config('app.name', 'SkillShare') }}
+                    {{ config('app.', 'ShareRoom') }}
                 </span>
             </div>
 
