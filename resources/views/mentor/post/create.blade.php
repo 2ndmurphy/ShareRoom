@@ -2,38 +2,81 @@
 @extends('layouts.mentor')
 
 @section('content')
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">
-        Tulis Post Undangan Baru <span class="text-xl text-gray-500 font-normal">untuk {{ $room->title }}</span>
-    </h1>
+    <div class="w-full px-2 md:px-0">
+        <div class="max-w-3xl mx-auto">
 
-    <form action="{{ route('mentor.rooms.posts.store', $room) }}" method="POST" 
-          class="bg-white p-6 md:p-8 rounded-lg shadow-md max-w-2xl">
-        @csrf
+            {{-- Card --}}
+            <form action="{{ route('mentor.rooms.posts.store', $room) }}" method="POST"
+                class="bg-white/90 border border-slate-100 rounded-[32px] shadow-lg p-8 md:p-12 space-y-10">
 
-        @include('partials._form-errors')
+                {{-- Header --}}
+                <header class="mb-6 md:mb-8">
+                    <h1 class="text-xl md:text-4xl font-semibold text-slate-900 tracking-tight leading-snug">
+                        Tulis Post Undangan Baru
+                        <span class="block md:inline text-2xl md:text-3xl text-slate-500 font-normal">
+                            untuk {{ $room->title }}
+                        </span>
+                    </h1>
+                </header>
 
-        <div class="mb-4">
-            <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Post</label>
-            <input type="text" id="title" name="title" value="{{ old('title') }}"
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                   placeholder="Contoh: Pendaftaran Room Laravel Batch 5 Dibuka!">
+                @csrf
+                @include('partials._form-errors')
+
+                {{-- Judul --}}
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label for="title" class="text-base font-semibold text-slate-800">
+                            Judul Post
+                        </label>
+                        <span class="text-[13px] text-slate-400">
+                            Maksimal 100 karakter
+                        </span>
+                    </div>
+
+                    <input type="text" id="title" name="title" value="{{ old('title') }}"
+                        class="w-full rounded-full border border-slate-300 bg-slate-50/70 px-6 py-3
+                               text-base text-slate-900 shadow-inner
+                               focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-100
+                               outline-none placeholder:text-slate-400 transition"
+                        placeholder="Contoh: Pendaftaran Room Laravel Batch 5 Dibuka!">
+                </div>
+
+                {{-- Isi Undangan --}}
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label for="content" class="text-base font-semibold text-slate-800">
+                            Isi Undangan
+                        </label>
+                    </div>
+
+                    <textarea id="content" name="content" rows="5"
+                        class="w-full rounded-3xl border border-slate-300 bg-slate-50/70 px-6 py-4
+                               text-base text-slate-900 leading-relaxed
+                               focus:bg-white focus:border-sky-500 focus:ring-4 focus:ring-sky-100
+                               outline-none transition placeholder:text-slate-400 resize-y min-h-[220px]"
+                        placeholder="Contoh:
+• Apa yang akan dipelajari
+• Durasi dan jadwal pertemuan
+• Siapa yang cocok ikut
+• Cara mendaftar atau join room">{{ old('content') }}</textarea>
+                </div>
+
+                {{-- Actions --}}
+                <div class="flex justify-end gap-4 pt-6 border-t border-slate-200">
+                    <a href="{{ route('mentor.rooms.show', $room) }}"
+                        class="px-7 py-3 rounded-full bg-slate-200 text-base font-medium text-slate-700
+                              hover:bg-slate-300 transition">
+                        Batal
+                    </a>
+
+                    <button type="submit"
+                        class="px-7 py-3 rounded-full bg-teal-500 text-base font-semibold text-white shadow-md
+                               hover:bg-teal-600 active:scale-[0.98] transition">
+                        Publikasikan Post
+                    </button>
+                </div>
+            </form>
+
         </div>
-
-        <div class="mb-6">
-            <label for="content" class="block text-sm font-medium text-gray-700 mb-1">Isi Undangan</label>
-            <textarea id="content" name="content" rows="10" 
-                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                      placeholder="Jelaskan apa yang akan dipelajari di room ini...">{{ old('content') }}</textarea>
-        </div>
-
-        <div class="flex justify-end space-x-3">
-            <a href="{{ route('mentor.rooms.show', $room) }}" class="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
-                Batal
-            </a>
-            <button type="submit" 
-                    class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-300">
-                Publikasikan Post
-            </button>
-        </div>
-    </form>
+    </div>
 @endsection
