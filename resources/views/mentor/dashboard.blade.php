@@ -1,25 +1,28 @@
 @extends('layouts.mentor')
 
 @section('content')
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold text-gray-800">
-            Dashboard
+    {{-- HEADER WELCOME --}}
+    <div class="text-white">
+        <p class="text-lg font-medium">Welcome aboard,</p>
+        <h1 class="text-3xl md:text-4xl font-bold mt-1">
+            Mentor {{ auth()->user()->name ?? 'Bagol' }}...
         </h1>
-        <a href="{{ route('mentor.rooms.create') }}" 
-           class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
-            Buat Room Baru
-        </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
+    {{-- GRID ROOM --}}
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         @forelse ($rooms as $room)
-            @include('partials._room-card', ['room' => $room])
+            {{-- wrapper kartu putih seperti di desain --}}
+            <div class="bg-white rounded-3xl shadow-sm p-6 flex flex-col justify-between">
+                @include('partials._room-card', ['room' => $room])
+            </div>
         @empty
-            <div class="md:col-span-2 lg:col-span-3 bg-white p-6 rounded-lg shadow-md text-center text-gray-500">
-                <p>Anda belum membuat room. Klik "Buat Room Baru" untuk memulai.</p>
+            <div class="md:col-span-2 bg-white/95 p-8 rounded-3xl shadow-sm text-center text-gray-600">
+                <p class="text-base font-semibold">Anda belum membuat room.</p>
+                <p class="text-sm mt-2">
+                    Klik tombol <span class="font-semibold">Create New Room</span> di kanan atas untuk memulai.
+                </p>
             </div>
         @endforelse
-        
     </div>
 @endsection

@@ -1,32 +1,67 @@
-<div class="bg-white shadow-lg rounded-lg overflow-hidden">
-    <div class="p-6">
-        <h3 class="text-xl font-semibold mb-2 text-gray-800">{{ $room->title }}</h3>
-        
-        <p class="text-sm text-gray-500 mb-3">{{ $room->roomType->name }}</p>
-        
-        <p class="text-gray-600 mb-4 text-sm line-clamp-3">
+<div class="bg-white rounded-[30px] shadow-md p-6 flex flex-col justify-between h-full">
+    {{-- HEADER: LOGO + NAMA ROOM --}}
+    <div class="space-y-4">
+        <div class="flex items-center gap-3">
+            {{-- “logo” kotak ijo dengan inisial --}}
+            <div class="h-11 w-11 rounded-2xl bg-teal-500 flex items-center justify-center">
+                <span class="text-white text-sm font-semibold">
+                    {{ strtoupper(substr($room->title, 0, 2)) }}
+                </span>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 leading-tight">
+                    {{ $room->title }}
+                </h3>
+                <p class="text-[11px] text-gray-500 mt-0.5">
+                    {{ $room->roomType->name }}
+                </p>
+            </div>
+        </div>
+
+        {{-- MINI MENU (Workshop, Bootcamp, dll) --}}
+        <div class="flex flex-wrap gap-4 text-[11px] font-medium text-gray-500">
+            <span>Workshop</span>
+            <span>Bootcamp</span>
+            <span>Projek</span>
+            <span>Diskusi</span>
+        </div>
+
+        {{-- DESKRIPSI --}}
+        <p class="text-sm text-gray-600 leading-relaxed line-clamp-3">
             {{ $room->description }}
         </p>
+    </div>
 
-        <div class="mb-4">
+    {{-- FOOTER: BUTTON + STATUS --}}
+    <div class="mt-5 flex items-center justify-between gap-3">
+        <a href="{{ route('mentor.rooms.show', $room) }}"
+           class="inline-flex items-center justify-center px-5 py-2.5 rounded-full
+                  bg-teal-500 hover:bg-teal-600 text-white text-sm font-semibold
+                  transition duration-200 shadow-sm">
+            Manage Room
+        </a>
+
+        <div>
             @if($room->status == 'open')
-                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                <span
+                    class="px-3 py-1 inline-flex text-[11px] leading-5 font-semibold rounded-full
+                           border border-emerald-200 bg-emerald-50 text-emerald-700">
                     Dibuka
                 </span>
             @elseif($room->status == 'closed')
-                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                <span
+                    class="px-3 py-1 inline-flex text-[11px] leading-5 font-semibold rounded-full
+                           border border-rose-200 bg-rose-50 text-rose-700">
                     Ditutup
                 </span>
             @else
-                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                <span
+                    class="px-3 py-1 inline-flex text-[11px] leading-5 font-semibold rounded-full
+                           border border-amber-200 bg-amber-50 text-amber-700">
                     Selesai
                 </span>
             @endif
         </div>
-
-        <a href="{{ route('mentor.rooms.show', $room) }}" 
-           class="inline-block w-full text-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-300">
-            Kelola Room
-        </a>
     </div>
 </div>
