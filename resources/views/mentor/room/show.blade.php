@@ -7,10 +7,10 @@
         {{-- Header Room --}}
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div class="space-y-2">
-                <h1 class="text-2xl md:text-3xl font-semibold text-white tracking-tight">
+                <h1 class="text-3xl md:text-4xl font-semibold text-white tracking-tight">
                     {{ $room->title }}
                 </h1>
-                <p class="text-xs md:text-sm text-white">
+                <p class="text-xl md:text-xl text-white">
                     Kelola materi dan post undangan untuk room ini dari satu tempat.
                 </p>
             </div>
@@ -53,7 +53,7 @@
                         @foreach ($room->materials->sortBy('created_at') as $material)
                             <li
                                 class="flex items-center justify-between gap-3 rounded-xl border border-slate-200/80
-                                       px-3 py-2.5 hover:bg-slate-50 transition">
+                                       px-3 py-2.5 bg-gray-50 hover:bg-slate-100 transition">
                                 <div class="flex items-center gap-3">
                                     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-lg">
                                         @if($material->type == 'file') 📄
@@ -132,7 +132,7 @@
                         @foreach ($room->posts->sortByDesc('created_at') as $post)
                             <li
                                 class="flex items-center justify-between gap-3 rounded-xl border border-slate-200/80
-                                       px-3 py-2.5 hover:bg-slate-50 transition">
+                                       px-3 py-2.5 bg-slate-50 hover:bg-slate-100 transition">
                                 <div class="flex flex-col">
                                     <span class="text-sm font-medium text-slate-900 line-clamp-1">
                                         {{ $post->title }}

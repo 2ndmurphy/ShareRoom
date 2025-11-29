@@ -9,6 +9,10 @@
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <style>
+    [x-cloak] { display: none !important; }
+    </style>
+
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -19,7 +23,7 @@
         @include('layouts.partials.mentor-sidebar')
 
         {{-- MAIN AREA --}}
-        <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 flex flex-col overflow-hidden md:ml-64">
 
             {{-- TOP BAR --}}
             <header class="h-20 flex items-center justify-between px-8 bg-white border-b border-gray-200 shadow-sm">
@@ -59,11 +63,7 @@
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-teal-400">
                 <div class="px-8 py-8 max-w-6xl mx-auto">
 
-                    @if (session('status'))
-                        <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl text-sm">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                    @include('partials._toast-status')
 
                     {{-- Wrap khusus halaman dashboard dengan card hijau --}}
                     @if (request()->routeIs('mentor.dashboard.index'))

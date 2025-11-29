@@ -166,14 +166,6 @@ class RoomMaterialController extends Controller
      */
     public function destroy(Room $room, RoomMaterial $roomMaterial)
     {
-        // Debug logging to help diagnose 403 on destroy
-        Log::info('RoomMaterialController@destroy check', [
-            'auth_id' => auth()->id(),
-            'room->mentor_id' => $room->mentor_id,
-            'room->id' => $room->id,
-            'roomMaterial->room_id' => $roomMaterial->room_id,
-        ]);
-
         // Ensure the material belongs to the room using integer-safe comparison
         if ((int) $roomMaterial->room_id !== (int) $room->id) {
             abort(403);

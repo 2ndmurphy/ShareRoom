@@ -1,4 +1,6 @@
-<aside class="hidden md:flex md:flex-col w-64 bg-white border-r border-gray-200 text-gray-800">
+<aside class="hidden md:flex md:flex-col w-64 bg-white border-r border-gray-200 text-gray-800
+               fixed inset-y-0 left-0 z-40">
+
     {{-- Logo + Title --}}
     <div class="px-6 py-5 flex items-center gap-3">
         <img src="{{ asset('images/icons/shareroom-icon.webp') }}" alt="shareroom-icon" class="w-12 h-12 object-contain">
