@@ -16,7 +16,7 @@ class StoreMaterialRequest extends FormRequest
         $room = $this->route('room');
 
         // Izinkan HANYA jika ID user == mentor_id di room
-        return $this->user() && $this->user()->id == $room->mentor_id;
+        return $this->user() && $this->user()->id == (int) $room->mentor_id;
     }
 
     /**
@@ -26,21 +26,26 @@ class StoreMaterialRequest extends FormRequest
      */
     public function rules(): array
     {
-        // Kita gunakan 'type' (dari UI) untuk validasi kondisional
         return [
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:65535'],
-            
+
             // 'type' adalah input <select> di form (file, link, text)
             'type' => ['required', 'string', Rule::in(['file', 'link', 'text'])],
 
+            // Input radio-button baru kita
+            'file_selection' => 'nullable|string',
+
+            // Validasi file upload HANYA jika file_selection adalah '_NEW_FILE_'
+            'new_file_upload' => 'nullable|required_if:file_selection,_NEW_FILE_|file|max:10240', // max 10MB
+
             // Wajib jika 'type' = 'file'
-            'file_upload' => [
-                Rule::requiredIf($this->input('type') === 'file'),
-                'nullable',
-                'file',
-                'max:20480', // 20MB max
-            ],
+            // 'file_upload' => [
+            //     Rule::requiredIf($this->input('type') === 'file'),
+            //     'nullable',
+            //     'file',
+            //     'max:20480', // 20MB max
+            // ],
 
             // Wajib jika 'type' = 'link'
             'link_url' => [

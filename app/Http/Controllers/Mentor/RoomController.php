@@ -7,8 +7,6 @@ use App\Http\Requests\Mentor\StoreRoomRequest;
 use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\RoomType;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 
 class RoomController extends Controller
 {
@@ -27,7 +25,7 @@ class RoomController extends Controller
     {
         $roomTypes = RoomType::query()->orderBy('name')->get();
 
-        // return view('mentor.room.create', ['roomTypes' => $roomTypes,]);
+        return view('mentor.room.create', ['roomTypes' => $roomTypes,]);
     }
 
     /**
@@ -41,8 +39,8 @@ class RoomController extends Controller
 
         $room = $mentor->roomsAsMentor()->create($validated);
 
-        // return redirect()->route('mentor.material.create', $room)
-        //     ->with('status', 'Room berhasil dibuat! Silakan tambahkan materi.');
+        return redirect()->route('mentor.rooms.materials.create', $room)
+            ->with('status', 'Room berhasil dibuat! Silakan tambahkan materi.');
     }
 
     /**
@@ -56,7 +54,7 @@ class RoomController extends Controller
 
         $room->load(['materials', 'posts']);
 
-        // return view('mentor.room.show', ['room' => $room]);
+        return view('mentor.room.show', ['room' => $room]);
     }
 
     /**
@@ -64,15 +62,33 @@ class RoomController extends Controller
      */
     public function edit(Room $room)
     {
-        //
+        if ($room->mentor_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $roomTypes = RoomType::query()->orderBy('name')->get();
+
+        return view('mentor.room.edit', [
+            'room' => $room,
+            'roomTypes' => $roomTypes,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Room $room)
+    public function update(StoreRoomRequest $request, Room $room)
     {
-        //
+        if ($room->mentor_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validated();
+
+        $room->update($validated);
+
+        return redirect()->route('mentor.rooms.show', $room)
+            ->with('status', 'Room berhasil diupdate!');
     }
 
     /**
@@ -80,6 +96,17 @@ class RoomController extends Controller
      */
     public function destroy(Room $room)
     {
-        //
+        if ($room->mentor_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if ($room->status === 'started') {
+            return redirect()->back()->with('error', 'Room tidak dapat dihapus karena sudah dimulai.');
+        }
+
+        $room->delete();
+
+        return redirect()->route('mentor.rooms.index')
+            ->with('status', 'Room berhasil dihapus.');
     }
 }

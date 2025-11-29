@@ -28,6 +28,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        if (Auth::user()->role == 'mentor') {
+            return redirect()->intended(route('mentor.dashboard.index', absolute: false));
+        }
+
         return redirect()->intended(route('explore.index', absolute: false));
     }
 

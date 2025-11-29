@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index() {
-        return view('mentor.dashboard');
+        $rooms = auth()->user()->roomsAsMentor;
+        return view('mentor.dashboard', compact('rooms'));
     }
 }

@@ -13,8 +13,7 @@ class StoreRoomRequest extends FormRequest
     public function authorize(): bool
     {
         return $this->user() &&
-            $this->user()->role === 'mentor' &&
-            $this->user()->mentor_status === true;
+            $this->user()->role === 'mentor';
     }
 
     /**

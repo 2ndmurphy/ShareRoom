@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SkillShare') }}</title>
+    <title>{{ config('app.name', 'ShareRoom') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -35,9 +35,9 @@
         <div class="w-full md:w-1/2 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-10 py-10">
             {{-- Logo + nama app --}}
             <div class="mb-8 flex items-center gap-3">
-                <img src="/images/icons/shareroom-icon.webp" alt="Shareroom" class="w-24 h-24">
+                <img src="{{ asset('images/icons/shareroom-icon.webp') }}" alt="Shareroom" class="w-24 h-24">
                 <span class="text-3xl font-semibold text-teal-500">
-                    {{ config('app.', 'ShareRoom') }}
+                    {{ config('app.name', 'ShareRoom') }}
                 </span>
             </div>
 

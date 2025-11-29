@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Mentor\MentorProfileRequest;
 use App\Models\MentorProfile;
 use App\Models\Skill;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -16,7 +17,7 @@ class MentorProfileController extends Controller
     /**
      * Show the form for editing mentor profile.
      * @param Request $request
-     * @return void
+     * @return \Illuminate\View\View
      */
     public function edit(Request $request)
     {
@@ -35,13 +36,14 @@ class MentorProfileController extends Controller
         //     'profile' => $profile,
         //     'allSkills' => $allSkills,
         // ]);
+        return view('mentor.profile.edit', compact('profile', 'allSkills'));
     }
 
     /**
      * Update the specified resource in storage.
      * @param Request $request
      * @param MentorProfile $mentorProfile
-     * @return void
+     * @return RedirectResponse
      */
     public function update(MentorProfileRequest $request)
     {
@@ -78,6 +80,6 @@ class MentorProfileController extends Controller
             $profile->skills()->sync($skillIds);
         });
 
-        // return redirect()->route('mentor.profile.edit')->with('status', 'Profil berhasil diperbarui!');
+        return redirect()->route('mentor.profile.edit', auth()->user())->with('status', 'Profil berhasil diperbarui!');
     }
 }

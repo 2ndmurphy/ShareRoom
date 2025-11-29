@@ -31,17 +31,18 @@ Route::middleware('auth')->group(function () {
     ]);
 
     // Mentor Verified Only Page Here
-    Route::middleware(['role:mentor', 'verified'])->prefix('m')->name('mentor.')->group(function () {
-        Route::resource('dashboard', DashboardController::class);
-        Route::resource('profile', MentorProfileController::class);
-        Route::resource('rooms', RoomController::class);
-        Route::resource('rooms.materials', RoomMaterialController::class);
-        Route::resource('rooms.posts', PostController::class);
-    });
+    Route::middleware(['role:mentor', 'verified'])->prefix('m')->name('mentor.')->group(fn () => [
+        Route::resource('dashboard', DashboardController::class),
+        Route::resource('profile', MentorProfileController::class),
+        Route::resource('rooms', RoomController::class),
+        Route::resource('rooms.materials', RoomMaterialController::class),
+        Route::resource('rooms.posts', PostController::class),
+    ]);
 
     // Learner Only Page Here
-    Route::middleware('role:learner')->group(function () {
-    });
+    Route::middleware('role:learner')->group(fn () => [
+
+    ]);
 });
 
 require __DIR__ . '/auth.php';

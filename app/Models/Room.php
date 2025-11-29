@@ -28,6 +28,9 @@ class Room extends Model
     protected $casts = [
         'started_at' => 'datetime',
         'end_at' => 'datetime',
+        // Pastikan ID selalu integer untuk perbandingan yang andal
+        'mentor_id' => 'integer',
+        'type_id' => 'integer',
     ];
 
     /**

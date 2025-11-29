@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Room;
+use App\Models\RoomType;
 use Illuminate\Http\Request;
 use App\Http\Requests\JoinRoomRequest;
 use App\Http\Requests\LeaveRoomRequest;
@@ -11,16 +12,23 @@ use App\Http\Requests\LeaveRoomRequest;
 class ExploreController extends Controller
 {
     /**
-     * Tampilkan halaman feed.
+     * Menampilkan explore feed (postingan undangan mentor).
      */
     public function index()
     {
-        // Ambil semua post, urutkan dari yang terbaru
-        $posts = Post::with(['user', 'room'])
-            ->latest()
-            ->paginate(15);
+        // Ambil postingan terbaru
+        // Load relasi 'user' (author) dan 'room' (beserta relasi 'roomType')
+        $posts = Post::with(['user', 'room.roomType'])
+                     ->latest()
+                     ->paginate(10);
 
-        return view('explore', compact('posts'));
+        // Ambil data untuk widget sidebar
+        $roomTypes = RoomType::orderBy('name', 'asc')->get();
+
+        return view('explore', [
+            'posts' => $posts,
+            'roomTypes' => $roomTypes
+        ]);
     }
 
     /**
@@ -68,8 +76,8 @@ class ExploreController extends Controller
             ]);
         }
 
-        // return redirect()->route('room.show', $room)
-        //     ->with('status', 'Anda berhasil bergabung ke Room!');
+        return redirect()->route('explore.room.show', $room)
+            ->with('status', 'Anda berhasil bergabung ke Room!');
     }
 
     public function leaveRoom(LeaveRoomRequest $request, Room $room)
@@ -79,7 +87,7 @@ class ExploreController extends Controller
         // detach() adalah kebalikan dari attach() / sync()
         $user->rooms()->detach($room->id);
 
-        return redirect()->route('room.show', $room)
+        return redirect()->route('explore.room.show', $room)
             ->with('status', 'Anda telah berhasil keluar dari Room.');
     }
 }
