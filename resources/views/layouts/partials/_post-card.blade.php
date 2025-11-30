@@ -22,11 +22,15 @@
     {{-- TITLE + CONTENT --}}
     <div>
       <h2 class="mb-2 text-xl font-bold leading-tight text-slate-900 transition group-hover:text-teal-600 md:text-2xl">
-        {{ $post->title }}
+          <a href="{{ route('explore.room.show', $post->room) }}" class="block hover:text-teal-600">
+            {{ $post->title }}
+          </a>
       </h2>
 
       <p class="mb-5 line-clamp-3 text-sm leading-relaxed text-slate-700 md:text-base">
-        {{ $post->content }}
+          <a href="{{ route('explore.room.show', $post->room) }}" class="block">
+            {{ $post->content }}
+          </a>
       </p>
     </div>
 
