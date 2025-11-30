@@ -162,7 +162,7 @@
 
     {{-- SIDEBAR --}}
     <aside class="lg:col-span-1">
-      <div class="space-y-6 lg:sticky lg:top-24">
+      <div class="space-y-6 lg:sticky">
 
         {{-- CARD MENTOR --}}
         <div class="rounded-3xl border border-slate-100 bg-white p-6 shadow-md">
