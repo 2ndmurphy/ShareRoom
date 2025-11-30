@@ -1,118 +1,286 @@
-@extends('layouts.app') @section('content')
-<div class="py-12 bg-gray-50">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        
-        <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900">{{ $room->title }}</h1>
-            <p class="text-lg text-gray-600">
-                Dibimbing oleh: 
-                <span class="font-semibold">{{ $room->mentor->name }}</span>
-            </p>
-        </div>
+@extends('layouts.learner')
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+@section('content')
+    <div class="py-10">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            <main class="lg:col-span-2">
-                
-                <div x-data="{ tab: 'materi' }" class="bg-white shadow-md rounded-lg overflow-hidden">
-                    
-                    <nav class="border-b border-gray-200">
-                        <div class="px-6">
-                            <ul class="flex">
-                                <li class="mr-1">
-                                    <button @click="tab = 'materi'" 
-                                            :class="tab === 'materi' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                                            class="py-4 px-1 border-b-2 font-medium text-sm focus:outline-none">
-                                        Materi & Progres
-                                    </button>
-                                </li>
-                                <li class="mr-1">
-                                    <button @click="tab = 'diskusi'" 
-                                            :class="tab === 'diskusi' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
-                                            class="py-4 px-1 border-b-2 font-medium text-sm focus:outline-none">
-                                        Diskusi
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-
-                    <div class="p-6 md:p-8">
-                        
-                        <div x-show="tab === 'materi'">
-                            <h2 class="text-2xl font-semibold text-gray-800 mb-5">
-                                Daftar Materi
-                            </h2>
-                            <ul class="space-y-5">
-                                @forelse ($room->materials as $material)
-                                <li class="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
-                                    <div class="flex items-center">
-                                        <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 mr-4">
-                                        
-                                        <span class="mr-3 text-2xl">
-                                            @if($material->type == 'file') 📄
-                                            @elseif($material->type == 'link') 🔗
-                                            @else 📝
-                                            @endif
-                                        </span>
-                                        
-                                        <div>
-                                            <h3 class="font-semibold text-gray-800">{{ $material->title }}</h3>
-                                            <p class="text-sm text-gray-600">{{ $material->description }}</p>
-                                        </div>
-                                    </div>
-                                    <button class="px-3 py-1 text-sm bg-indigo-100 text-indigo-700 rounded-full hover:bg-indigo-200">
-                                        Lihat
-                                    </button>
-                                </li>
-                                @empty
-                                <p class="text-gray-500 italic">Belum ada materi yang dipublikasikan oleh mentor.</p>
-                                @endforelse
-                            </ul>
+            {{-- HEADER ROOM --}}
+            <div class="mb-6">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                            @if($room->roomType)
+                                <span
+                                    class="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-3 py-1
+                                           text-[11px] font-semibold uppercase tracking-wide text-indigo-600">
+                                    {{ $room->roomType->name }}
+                                </span>
+                            @endif
+                            <span
+                                class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1
+                                       text-[11px] font-medium text-slate-600 capitalize">
+                                💻 {{ $room->mode }}
+                            </span>
                         </div>
 
-                        <div x-show="tab === 'diskusi'" style="display: none;">
-                            <h2 class="text-2xl font-semibold text-gray-800 mb-5">
-                                Diskusi Room
-                            </h2>
-                            <p class="text-gray-500 italic">
-                                Fitur diskusi akan segera hadir. Di sini Anda bisa bertanya kepada mentor dan rekan satu room.
-                            </p>
+                        <h1 class="text-2xl md:text-3xl font-bold text-white">
+                            {{ $room->title }}
+                        </h1>
+                        <p class="mt-1 text-sm md:text-base text-white">
+                            Dibimbing oleh
+                            <span class="font-semibold text-white">
+                                {{ $room->mentor->name }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {{-- CONTENT GRID --}}
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+
+                {{-- MAIN --}}
+                <main class="lg:col-span-2">
+                    <div x-data="{ tab: 'materi' }"
+                         class="bg-white/95 backdrop-blur-sm shadow-sm rounded-3xl border border-slate-100 overflow-hidden">
+
+                        {{-- TABS --}}
+                        <nav class="border-b border-slate-100 bg-slate-50/60">
+                            <div class="px-4 md:px-6">
+                                <ul class="flex items-center gap-4 md:gap-8 text-sm font-semibold">
+                                    <li>
+                                        <button
+                                            @click="tab = 'materi'"
+                                            :class="tab === 'materi'
+                                                ? 'text-slate-900 border-b-2 border-indigo-500'
+                                                : 'text-slate-400 border-b-2 border-transparent hover:text-slate-700'"
+                                            class="py-4 inline-flex items-center gap-2 transition-colors">
+                                            <span class="text-xs">📚</span>
+                                            <span>Materi & Progres</span>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            @click="tab = 'diskusi'"
+                                            :class="tab === 'diskusi'
+                                                ? 'text-slate-900 border-b-2 border-indigo-500'
+                                                : 'text-slate-400 border-b-2 border-transparent hover:text-slate-700'"
+                                            class="py-4 inline-flex items-center gap-2 transition-colors">
+                                            <span class="text-xs">💬</span>
+                                            <span>Diskusi</span>
+                                        </button>
+                                    </li>
+                                </ul>
                             </div>
+                        </nav>
 
+                        {{-- TAB CONTENT --}}
+                        <div class="p-6 md:p-8 space-y-6">
+
+                            {{-- TAB MATERI --}}
+                            <section x-show="tab === 'materi'" x-cloak>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-xl md:text-2xl font-semibold text-slate-900">
+                                        Daftar Materi
+                                    </h2>
+                                    <p class="text-xs text-slate-400">
+                                        @if($room->materials->count())
+                                            {{ $room->materials->count() }} materi tersedia
+                                        @else
+                                            Belum ada materi
+                                        @endif
+                                    </p>
+                                </div>
+
+                                @if($room->materials->count())
+                                    <ul class="space-y-4">
+                                        @foreach ($room->materials as $material)
+                                            <li
+                                                class="flex flex-col md:flex-row md:items-center md:justify-between gap-3
+                                                       p-4 md:p-5 rounded-2xl border border-slate-100 bg-slate-50/70
+                                                       hover:bg-white hover:shadow-md transition-all duration-150">
+
+                                                <div class="flex items-start gap-3 md:gap-4">
+                                                    {{-- Checkbox / progress marking (nanti bisa dihubungkan ke DB) --}}
+                                                    <input
+                                                        type="checkbox"
+                                                        class="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+
+                                                    {{-- Icon + text --}}
+                                                    <div class="flex items-start gap-3">
+                                                        <div
+                                                            class="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl
+                                                                   bg-indigo-50 text-xl">
+                                                            @if($material->type == 'file')
+                                                                📄
+                                                            @elseif($material->type == 'link')
+                                                                🔗
+                                                            @else
+                                                                📝
+                                                            @endif
+                                                        </div>
+
+                                                        <div>
+                                                            <h3 class="font-semibold text-slate-900 leading-snug">
+                                                                {{ $material->title }}
+                                                            </h3>
+                                                            @if($material->description)
+                                                                <p class="mt-1 text-sm text-slate-500 line-clamp-2">
+                                                                    {{ $material->description }}
+                                                                </p>
+                                                            @endif
+                                                            <p class="mt-1 text-[11px] uppercase tracking-wide text-slate-400">
+                                                                @if($material->type == 'file')
+                                                                    File Materi
+                                                                @elseif($material->type == 'link')
+                                                                    Link Eksternal
+                                                                @else
+                                                                    Konten Teks
+                                                                @endif
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- CTA Lihat --}}
+                                                <div class="flex md:flex-none">
+                                                    <button
+                                                        class="inline-flex items-center justify-center gap-2
+                                                               rounded-full bg-indigo-100 px-4 py-1.5 text-xs
+                                                               font-semibold text-indigo-700
+                                                               hover:bg-indigo-200 transition">
+                                                        Lihat
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5"
+                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                  d="M9 5l7 7-7 7" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <div
+                                        class="mt-4 rounded-2xl border border-dashed border-slate-200 bg-slate-50/70
+                                               px-6 py-8 text-center">
+                                        <p class="text-sm font-medium text-slate-700 mb-1">
+                                            Belum ada materi yang dipublikasikan.
+                                        </p>
+                                        <p class="text-xs text-slate-500">
+                                            Tunggu mentor menambahkan materi untuk room ini.
+                                        </p>
+                                    </div>
+                                @endif
+                            </section>
+
+                            {{-- TAB DISKUSI --}}
+                            <section x-show="tab === 'diskusi'" x-cloak>
+                                <h2 class="text-xl md:text-2xl font-semibold text-slate-900 mb-3">
+                                    Diskusi Room
+                                </h2>
+                                <p class="text-sm text-slate-500 mb-5">
+                                    Fitur diskusi akan segera hadir. Nantinya kamu dapat bertanya kepada mentor dan berdiskusi
+                                    dengan peserta lain di room ini.
+                                </p>
+
+                                <div
+                                    class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/80 px-6 py-7 text-center">
+                                    <p class="text-sm font-medium text-slate-700 mb-1">
+                                        Coming Soon
+                                    </p>
+                                    <p class="text-xs text-slate-500">
+                                        Fitur komentar, tanya jawab, dan pengumuman mentor akan tersedia di sini.
+                                    </p>
+                                </div>
+                            </section>
+
+                        </div>
                     </div>
-                </div>
-            </main>
+                </main>
 
-            <aside class="lg:col-span-1 space-y-6">
-                <div class="bg-white shadow-md rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Progres Saya</h3>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
+                {{-- SIDEBAR --}}
+                <aside class="lg:col-span-1 space-y-6">
+
+                    {{-- PROGRES SAYA --}}
+                    <div class="bg-white/95 backdrop-blur-sm shadow-sm rounded-3xl border border-slate-100 p-6">
+                        <h3 class="text-sm font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-emerald-50 text-emerald-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                     viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M5 13l4 4L19 7" />
+                                </svg>
+                            </span>
+                            Progres Saya
+                        </h3>
+
+                        {{-- progress bar dummy (0%) --}}
+                        <div class="mt-2">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs font-medium text-slate-500 uppercase tracking-wide">
+                                    Progress Belajar
+                                </span>
+                                <span class="text-xs font-semibold text-slate-700">
+                                    0%
+                                </span>
+                            </div>
+                            <div class="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                                <div class="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500"
+                                     style="width: 0%"></div>
+                            </div>
+                            <p class="mt-2 text-xs text-slate-500">
+                                Tandai materi yang sudah kamu pelajari untuk melihat progres di sini.
+                            </p>
+                        </div>
                     </div>
-                    <p class="text-sm text-gray-500 mt-2">0% Selesai</p>
-                </div>
 
-                <div class="bg-white shadow-md rounded-lg p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Tentang Room Ini</h3>
-                    <ul class="space-y-3 text-sm">
-                        <li class="flex justify-between items-center">
-                            <span class="font-medium text-gray-600">🗓️ Mulai</span>
-                            <span class="text-gray-800 font-semibold">{{ $room->started_at->format('j M Y') }}</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <span class="font-medium text-gray-600">🏁 Selesai</span>
-                            <span class="text-gray-800 font-semibold">{{ $room->end_at->format('j M Y') }}</span>
-                        </li>
-                        <li class="flex justify-between items-center">
-                            <span class="font-medium text-gray-600">💻 Mode</span>
-                            <span class="text-gray-800 font-semibold capitalize">{{ $room->mode }}</span>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
+                    {{-- TENTANG ROOM --}}
+                    <div class="bg-white/95 backdrop-blur-sm shadow-sm rounded-3xl border border-slate-100 p-6">
+                        <h3 class="text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-xl bg-indigo-50 text-indigo-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                     viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                            </span>
+                            Tentang Room Ini
+                        </h3>
 
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-center justify-between">
+                                <span class="text-slate-500 flex items-center gap-2">
+                                    <span>🗓️</span>
+                                    <span class="font-medium">Mulai</span>
+                                </span>
+                                <span class="font-semibold text-slate-800">
+                                    {{ $room->started_at->format('j M Y') }}
+                                </span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span class="text-slate-500 flex items-center gap-2">
+                                    <span>🏁</span>
+                                    <span class="font-medium">Selesai</span>
+                                </span>
+                                <span class="font-semibold text-slate-800">
+                                    {{ $room->end_at->format('j M Y') }}
+                                </span>
+                            </li>
+                            <li class="flex items-center justify-between">
+                                <span class="text-slate-500 flex items-center gap-2">
+                                    <span>💻</span>
+                                    <span class="font-medium">Mode</span>
+                                </span>
+                                <span class="font-semibold text-slate-800 capitalize">
+                                    {{ $room->mode }}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </aside>
+            </div>
         </div>
     </div>
-</div>
 @endsection

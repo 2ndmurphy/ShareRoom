@@ -12,7 +12,7 @@
     {{-- GRID ROOM --}}
     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         @forelse ($rooms as $room)
-            @include('partials._room-card', ['room' => $room])
+            @include('layouts.partials._room-card', ['room' => $room])
         @empty
             <div class="md:col-span-2 bg-white/95 p-8 rounded-3xl shadow-sm text-center text-gray-600">
                 <p class="text-base font-semibold">Anda belum membuat room.</p>

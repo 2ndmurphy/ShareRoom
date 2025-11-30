@@ -7,14 +7,6 @@
     {{-- MAIN CONTENT --}}
     <main class="space-y-4 lg:col-span-2">
       <div class="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-md">
-        {{-- BACK BUTTON --}}
-        <a class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-medium text-teal-600 transition-all hover:hover:text-teal-800"
-          href="{{ route('explore.index') }}">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-          </svg>
-          Kembali
-        </a>
 
         {{-- HEADER ROOM --}}
         <div class="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-teal-50 px-6 pb-4 pt-6 md:px-10 md:pt-8">
@@ -85,7 +77,7 @@
                   </p>
 
                   <button
-                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400/50 active:bg-indigo-800"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-teal-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-400/50 active:bg-indigo-800"
                     type="submit">
                     Gabung Room
                   </button>
